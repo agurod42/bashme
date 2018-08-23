@@ -1,0 +1,27 @@
+{
+  "name": "clime",
+  "version": "1.0.0",
+  "description": "👨‍💻👩‍💻 The first command line interface about you",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts",
+    "test-show": "ts-node ./test/show.ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "vorpal": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/inquirer": "0.0.43",
+    "@types/minimist": "^1.2.0",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.7.1",
+    "chai": "^4.1.2",
+    "dotenv": "^6.0.0",
+    "mocha": "^5.2.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.1"
+  }
+}
