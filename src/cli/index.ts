@@ -1,12 +1,15 @@
 import Vorpal = require('vorpal');
+import { Terminal } from 'xterm';
 
 import { Command } from './command';
 
 export class Cli {
 
+    private terminal: Terminal;
     private vorpal: Vorpal;
 
     constructor() {
+        this.terminal = new Terminal();
         this.vorpal = new Vorpal();
         this.vorpal.delimiter('~>');
     }
@@ -20,8 +23,14 @@ export class Cli {
             });
     }
 
-    show() {
-        this.vorpal.show();
+    show(domElement: HTMLElement) {
+        this.terminal.on('data', (data) => {
+            this.vorpal.exec(data, (res: any) => {
+                this.terminal.writeln(res);
+            });
+        })
+        
+        this.terminal.open(domElement);
     }
 
 }

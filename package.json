@@ -10,7 +10,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "vorpal": "^1.12.0"
+    "vorpal": "^1.12.0",
+    "xterm": "^3.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",

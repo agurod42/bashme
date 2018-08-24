@@ -15,7 +15,7 @@ class Clime {
         return this;
     }
     
-    show() {
+    show(domElement: HTMLElement) {
         let cli = new Cli();
 
         if (this.resume.name) {
@@ -54,7 +54,7 @@ class Clime {
             cli.register(new LanguageCommand(this.resume.language));
         }
 
-        cli.show();
+        cli.show(domElement);
     }
 
 }
