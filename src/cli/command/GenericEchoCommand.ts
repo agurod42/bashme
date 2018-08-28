@@ -15,7 +15,7 @@ export class GenericEchoCommand implements Command<string> {
     }
 
     run() {
-        console.log(this.string);
+        return this.string;
     }
 
 }

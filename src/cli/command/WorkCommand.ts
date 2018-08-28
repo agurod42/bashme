@@ -14,7 +14,7 @@ export class WorkCommand implements Command<Work> {
     }
 
     run() {
-        console.log(this.work);
+        return this.work;
     }
 
 }

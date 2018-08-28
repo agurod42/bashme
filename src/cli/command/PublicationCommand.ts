@@ -14,7 +14,7 @@ export class PublicationCommand implements Command<Publication> {
     }
 
     run() {
-        console.log(this.publication);
+        return this.publication;
     }
 
 }

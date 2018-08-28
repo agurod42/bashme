@@ -14,7 +14,7 @@ export class LanguageCommand implements Command<Language> {
     }
 
     run() {
-        console.log(this.language);
+        return this.language;
     }
 
 }

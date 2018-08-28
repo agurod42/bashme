@@ -14,7 +14,7 @@ export class AwardCommand implements Command<Award> {
     }
 
     run() {
-        console.log(this.award);
+        return this.award;
     }
 
 }

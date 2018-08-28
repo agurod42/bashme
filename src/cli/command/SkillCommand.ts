@@ -14,7 +14,7 @@ export class SkillCommand implements Command<Skill> {
     }
 
     run() {
-        console.log(this.skill);
+        return this.skill;
     }
 
 }

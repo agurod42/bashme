@@ -1,16 +1,17 @@
 {
-  "name": "clime",
-  "version": "1.0.0",
+  "name": "bashme",
+  "version": "0.1.0",
   "description": "👨‍💻👩‍💻 The first command line interface about you",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts",
-    "test-show": "ts-node ./test/show.ts"
+    "build": "tsc",
+    "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts"
   },
-  "author": "",
+  "author": "agurodriguez",
   "license": "MIT",
   "dependencies": {
-    "vorpal": "^1.12.0",
+    "minimist": "^1.2.0",
     "xterm": "^3.6.0"
   },
   "devDependencies": {

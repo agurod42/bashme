@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import Clime from '../src/Clime';
+import Clime from '../src';
 import { Json } from '../src/resume/providers';
 
 describe('Json infoProvider', function () {

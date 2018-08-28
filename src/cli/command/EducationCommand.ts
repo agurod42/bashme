@@ -14,7 +14,7 @@ export class EducationCommand implements Command<Education> {
     }
 
     run() {
-        console.log(this.education);
+        return this.education;
     }
 
 }

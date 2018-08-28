@@ -7,8 +7,13 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
 
     private data: any;
 
-    constructor(path: string) {
-        this.data = JSON.parse(readFileSync(path).toString());
+    constructor(objectOrFilePath: object | string) {
+        if (typeof objectOrFilePath === 'object') {
+            this.data = objectOrFilePath;
+        }
+        else if (typeof objectOrFilePath === 'string') {
+            this.data = JSON.parse(readFileSync(objectOrFilePath).toString());
+        }
     }
 
     getName(): string {

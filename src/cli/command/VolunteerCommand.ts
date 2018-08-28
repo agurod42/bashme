@@ -14,7 +14,7 @@ export class VolunteerCommand implements Command<Volunteer> {
     }
 
     run() {
-        console.log(this.volunteer);
+        return this.volunteer;
     }
 
 }
