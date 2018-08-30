@@ -12,14 +12,16 @@ export class Cli {
     private buffer: string = '';
     private cursorOffset: number = 0;
     private terminal: Terminal;
-    private terminalPrompt: string = '> ';
+    private terminalPrompt: string = 'bashme$ ';
     private terminalHistory: Array<string> = [];
     private terminalHistoryIndex = 0;
 
     constructor() {
         this.terminal = new Terminal({
             cursorBlink: true,
-            cursorStyle: 'underline'
+            cursorStyle: 'underline',
+            fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+            fontSize: 12
         });
         
         this.terminal.on('key', (d) => this.input(d!));
