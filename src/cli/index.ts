@@ -1,6 +1,7 @@
 import minimist from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
+import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 
 import { Command } from './command';
 
@@ -129,6 +130,7 @@ export class Cli {
         this.prompt(false);
 
         fit(this.terminal);
+        webLinksInit(this.terminal);
     }
 
 }
