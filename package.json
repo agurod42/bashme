@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp ./node_modules/xterm/dist/xterm.css ./dist",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts"
   },
   "author": "agurodriguez",
