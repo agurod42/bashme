@@ -3,14 +3,14 @@ import { AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, Publ
 import { Resume } from './resume';
 import { InfoProvider } from './resume/providers';
 
-class Clime {
+class Bashme {
 
     public resume: Resume = new Resume();
 
     constructor() {
     }
 
-    use(infoProvider: InfoProvider): Clime {
+    use(infoProvider: InfoProvider): Bashme {
         infoProvider.fill(this.resume);
         return this;
     }
@@ -59,4 +59,4 @@ class Clime {
 
 }
 
-export default new Clime();
+export default new Bashme();

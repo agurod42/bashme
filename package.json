@@ -11,11 +11,13 @@
   "author": "agurodriguez",
   "license": "MIT",
   "dependencies": {
+    "easy-table": "^1.1.1",
     "minimist": "^1.2.0",
     "xterm": "^3.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
+    "@types/easy-table": "0.0.31",
     "@types/inquirer": "0.0.43",
     "@types/minimist": "^1.2.0",
     "@types/mocha": "^5.2.5",

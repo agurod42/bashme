@@ -97,9 +97,8 @@ export class Cli {
             let cmd = this.commands[cmdName];
             
             if (cmd) {
-                let res = cmd.action();
-                let output = JSON.stringify(res, null, 2).replace(/\r?\n/g, '\r\n');
-                this.terminal.write(`\r\n${output}`);
+                let res = cmd.run(args).replace(/\r?\n/g, '\r\n');
+                this.terminal.write(`\r\n${res}`);
             }
             else {
                 this.showHelp();

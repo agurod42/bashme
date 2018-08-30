@@ -13,6 +13,7 @@ export interface Command<T> {
 
     name: string;
     description: string;
-    action: Function;
+
+    run(args: any): string;
 
 }

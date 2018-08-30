@@ -1,4 +1,5 @@
 import { Language } from '../../resume/properties';
+import { arrayToAsciiTable } from '../util';
 import { Command } from '.';
 
 export class LanguageCommand implements Command<Language> {
@@ -7,14 +8,13 @@ export class LanguageCommand implements Command<Language> {
 
     public name: string = 'languages';
     public description: string = 'Shows languages';
-    public action = this.run;
 
     constructor(language: Array<Language>) {
         this.language = language;
     }
 
-    run() {
-        return this.language;
+    run(): string {
+        return arrayToAsciiTable(this.language);
     }
 
 }

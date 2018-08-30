@@ -1,4 +1,5 @@
 import { Award } from '../../resume/properties';
+import { arrayToAsciiTable } from '../util';
 import { Command } from '.';
 
 export class AwardCommand implements Command<Award> {
@@ -7,14 +8,13 @@ export class AwardCommand implements Command<Award> {
 
     public name: string = 'awards';
     public description: string = 'Shows awards';
-    public action = this.run;
 
     constructor(award: Array<Award>) {
         this.award = award;
     }
 
-    run() {
-        return this.award;
+    run(): string {
+        return arrayToAsciiTable(this.award);
     }
 
 }
