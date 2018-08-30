@@ -1,12 +1,11 @@
 import { Command } from '.';
 
-export class GenericEchoCommand implements Command<string> {
+export class AnyStringCommand implements Command<string> {
 
     private string: string;
 
     public name: string;
     public description: string;
-    public action = this.run;
 
     constructor(name: string, description: string, string: string) {
         this.name = name;
@@ -14,7 +13,7 @@ export class GenericEchoCommand implements Command<string> {
         this.string = string;
     }
 
-    run() {
+    run(): string {
         return this.string;
     }
 

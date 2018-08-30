@@ -1,5 +1,5 @@
 
-export * from './GenericEchoCommand';
+export * from './AnyStringCommand';
 
 export * from './AwardCommand';
 export * from './EducationCommand';

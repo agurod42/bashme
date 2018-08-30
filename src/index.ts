@@ -1,7 +1,7 @@
 import { Cli } from './cli';
+import { AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, PublicationCommand, SkillCommand, VolunteerCommand, WorkCommand } from './cli/command';
 import { Resume } from './resume';
 import { InfoProvider } from './resume/providers';
-import { AwardCommand, EducationCommand, GenericEchoCommand, LanguageCommand, PublicationCommand, SkillCommand, VolunteerCommand, WorkCommand } from './cli/command';
 
 class Clime {
 
@@ -19,11 +19,11 @@ class Clime {
         let cli = new Cli();
 
         if (this.resume.name) {
-            cli.register(new GenericEchoCommand('name', 'Shows name', this.resume.name));
+            cli.register(new AnyStringCommand('name', 'Shows name', this.resume.name));
         }
 
         if (this.resume.bio) {
-            cli.register(new GenericEchoCommand('bio', 'Shows bio', this.resume.bio));
+            cli.register(new AnyStringCommand('bio', 'Shows bio', this.resume.bio));
         }
 
         if (this.resume.education) {
