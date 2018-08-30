@@ -129,6 +129,7 @@ export class Cli {
 
     show(domElement: HTMLElement) {
         this.terminal.open(domElement);
+        this.terminal.focus();
         this.prompt(false);
 
         fit(this.terminal);
