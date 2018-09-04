@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="../dist/xterm.css" />
+        <script type="text/javascript" src="../dist/bundle.js"></script>
+    </head>
+    <body>
+        <div id='#bashme'></div>
+    </body>
+    <script>
+        var bashme = new Bashme.default();
+        bashme.use(new Bashme.Json({ name: 'Agustín', skills: [{ name: 'typescript', level: 'beginner' }] }));
+        bashme.show(document.querySelector('#bashme'));
+    </script>
+</html>

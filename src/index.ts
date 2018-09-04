@@ -3,7 +3,7 @@ import { AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, Publ
 import { Resume } from './resume';
 import { InfoProvider } from './resume/providers';
 
-class Bashme {
+export default class Bashme {
 
     public resume: Resume = new Resume();
 
@@ -59,4 +59,4 @@ class Bashme {
 
 }
 
-export default new Bashme();
+export * from './resume/providers';

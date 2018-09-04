@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs';
 import { Award, Education, Language, Publication, Skill, Volunteer, Work } from '../../resume/properties';
 import { Resume } from '../../resume';
 import { IntroProvider, AwardProvider, EducationProvider, LanguageProvider, PublicationProvider, SkillProvider, VolunteerProvider, WorkProvider } from '../../resume/providers';
@@ -7,13 +6,8 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
 
     private data: any;
 
-    constructor(objectOrFilePath: object | string) {
-        if (typeof objectOrFilePath === 'object') {
-            this.data = objectOrFilePath;
-        }
-        else if (typeof objectOrFilePath === 'string') {
-            this.data = JSON.parse(readFileSync(objectOrFilePath).toString());
-        }
+    constructor(object: object) {
+        this.data = object;
     }
 
     getName(): string {
