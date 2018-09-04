@@ -1,3 +1,4 @@
+import Table from 'easy-table';
 import minimist from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
@@ -100,8 +101,8 @@ export class Cli {
             let cmd = this.commands[cmdName];
             
             if (cmd) {
-                let res = cmd.run(args).replace(/\r?\n/g, '\r\n');
-                this.terminal.write(`\r\n${res}`);
+                let res = cmd.run(args);
+                this.write(`\r\n${res}`);
             }
             else {
                 this.showHelp();
@@ -120,7 +121,16 @@ export class Cli {
     }
 
     private showHelp() {
+        let table = new Table();
+        table.separator = '\t\t';
+
+        for (let i in this.commands) {
+            table.cell('name', this.commands[i].name);
+            table.cell('description', this.commands[i].description);
+            table.newRow();
+        }
         
+        this.terminal.write('\r\n\r\nThese commands are defined.\r\nType `help name` to find out more about the function `name`.\r\n\r\n\t' + table.print().replace(/\r?\n/g, '\r\n\t'));
     }
 
     register(command: Command<any>) {
@@ -134,6 +144,10 @@ export class Cli {
 
         fit(this.terminal);
         webLinksInit(this.terminal);
+    }
+
+    write(str: string) {
+        this.terminal.write(str.replace(/\r?\n/g, '\r\n'));
     }
 
 }
