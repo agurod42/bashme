@@ -137,7 +137,7 @@ export class Cli {
 
     private showHelpTopic(cmdName: string) {
         if (this.helpTopics[cmdName]) {
-            this.write('\r\n\r\n' + this.helpTopics[cmdName] + '\r\n\r\n');
+            this.write('\r\n\r\n' + this.helpTopics[cmdName] + '\r\n');
         }
         else {
             this.write(`\r\nno help topics match \`${cmdName}\``);
