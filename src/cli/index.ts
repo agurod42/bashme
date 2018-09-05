@@ -5,10 +5,12 @@ import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 
 import { Command } from './command';
+import { HelpTopic } from './helpTopic';
 
 export class Cli {
 
     private commands: { [key: string]: Command<any>; } = {};
+    private helpTopics: { [key: string]: HelpTopic } = {};
 
     private buffer: string = '';
     private cursorOffset: number = 0;
@@ -100,12 +102,12 @@ export class Cli {
             let cmdName = args._[0];
             let cmd = this.commands[cmdName];
             
-            if (cmd) {
+            if (cmdName === 'help') {
+                args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
+            }
+            else if (cmd) {
                 let res = cmd.run(args);
                 this.write(`\r\n${res}`);
-            }
-            else {
-                this.showHelp();
             }
 
             this.terminalHistory.push(buffer);
@@ -133,8 +135,21 @@ export class Cli {
         this.terminal.write('\r\n\r\nThese commands are defined.\r\nType `help name` to find out more about the function `name`.\r\n\r\n\t' + table.print().replace(/\r?\n/g, '\r\n\t'));
     }
 
+    private showHelpTopic(cmdName: string) {
+        if (this.helpTopics[cmdName]) {
+            this.write('\r\n\r\n' + this.helpTopics[cmdName] + '\r\n\r\n');
+        }
+        else {
+            this.write(`\r\nno help topics match \`${cmdName}\``);
+        }
+    }
+
     register(command: Command<any>) {
         this.commands[command.name] = command;
+
+        if (command.helpTopic) {
+            this.helpTopics[command.name] = command.helpTopic;
+        }
     }
 
     show(domElement: HTMLElement) {

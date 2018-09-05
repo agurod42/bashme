@@ -1,3 +1,4 @@
+import { HelpTopic } from '../helpTopic';
 
 export * from './AnyStringCommand';
 
@@ -13,6 +14,7 @@ export interface Command<T> {
 
     name: string;
     description: string;
+    helpTopic?: HelpTopic;
 
     run(args: any): string;
 
