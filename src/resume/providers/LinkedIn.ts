@@ -1,3 +1,4 @@
+import { Cli } from '../../cli';
 import { Resume } from '../../resume';
 import { IntroProvider } from '../../resume/providers';
 
@@ -15,8 +16,12 @@ export class LinkedIn implements IntroProvider {
         return '';
     }   
     
-    fill(resume: Resume): void {
+    fill(resume: Resume) {
         
+    }
+
+    registerCommands(cli: Cli) {
+
     }
 
 }
