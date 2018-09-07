@@ -109,6 +109,9 @@ export class Cli {
                 let res = cmd.run(args);
                 this.write(`\r\n${res}`);
             }
+            else {
+                this.write(`\r\n${cmdName}: command not found`);
+            }
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
