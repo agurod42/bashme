@@ -14,7 +14,7 @@ export class VolunteerCommand implements Command<Volunteer> {
     }
 
     run(): string {
-        return JSON.stringify(this.volunteer);
+        return arrayToAsciiTable(this.volunteer);
     }
 
 }
