@@ -1,6 +1,9 @@
+import minimist from 'minimist';
+
 import { HelpTopic } from '../helpTopic';
 
 export * from './AnyStringCommand';
+export * from './DebugCommand';
 
 export * from './AwardCommand';
 export * from './EducationCommand';
@@ -16,6 +19,6 @@ export interface Command<T> {
     description: string;
     helpTopic?: HelpTopic;
 
-    run(args: any): string;
+    run(args?: minimist.ParsedArgs): string;
 
 }
