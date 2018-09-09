@@ -7,7 +7,8 @@ export class Education {
         public fieldOfStudy: string,
         public grade: number,
         public startYear: number,
-        public endYear: number
+        public endYear: number,
+        public notes: string
     ) {
     }
 

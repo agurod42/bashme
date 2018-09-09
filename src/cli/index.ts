@@ -1,10 +1,11 @@
-import Table from 'easy-table';
+import Table from 'cli-table2';
+import EasyTable from 'easy-table';
 import minimist from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 
-import { Command } from './command';
+import { Command, CommandOutput } from './command';
 import { HelpTopic } from './helpTopic';
 
 export class Cli {
@@ -21,6 +22,7 @@ export class Cli {
 
     constructor() {
         this.terminal = new Terminal({
+            convertEol: true,
             cursorBlink: true,
             cursorStyle: 'underline',
             fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
@@ -106,8 +108,8 @@ export class Cli {
                 args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
             }
             else if (cmd) {
-                let res = cmd.run(args);
-                this.write(`\r\n${res}`);
+                let output = cmd.run(args);
+                this.write(`\r\n${this.processOutput(output)}`);
             }
             else {
                 this.write(`\r\n${cmdName}: command not found`);
@@ -121,12 +123,44 @@ export class Cli {
         this.buffer = '';
     }
 
+    private processOutput(output: CommandOutput): string {
+        if (typeof output === 'object') {
+            if (Array.isArray(output)) {
+                // print as table
+                if (!output.length) return '';
+
+                let cols = Object.keys(output[0]).length;
+                let colWidths = Array(cols).fill(Math.floor((this.terminal.cols - 6) / cols));
+
+                let table = new Table({
+                    colWidths: colWidths,
+                    head: Object.keys(output[0]),
+                    wordWrap: true,
+                });
+                    
+                output.forEach(item => {
+                    // @ts-ignore
+                    table.push(Object.values(item));
+                });
+                
+                return table.toString();
+            }
+            else {
+                // print as json
+                return JSON.stringify(output, null, 2);
+            }
+        }
+        else {
+            return output.toString();
+        }
+    }
+
     private prompt(newLine: boolean = true) {
         this.terminal.write(`${newLine ? '\r\n' : ''}${this.terminalPrompt}`);
     }
 
     private showHelp() {
-        let table = new Table();
+        let table = new EasyTable();
         table.separator = '\t\t';
 
         for (let i in this.commands) {
@@ -165,7 +199,7 @@ export class Cli {
     }
 
     write(str: string) {
-        this.terminal.write(str.replace(/\r?\n/g, '\r\n'));
+        this.terminal.write(str);
     }
 
 }

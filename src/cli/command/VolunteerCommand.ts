@@ -1,5 +1,4 @@
 import { Volunteer } from '../../resume/properties';
-import { arrayToAsciiTable } from '../util';
 import { Command } from '.';
 
 export class VolunteerCommand implements Command<Volunteer> {
@@ -13,8 +12,8 @@ export class VolunteerCommand implements Command<Volunteer> {
         this.volunteer = volunteer;
     }
 
-    run(): string {
-        return arrayToAsciiTable(this.volunteer);
+    run(): Array<Volunteer> {
+        return this.volunteer;
     }
 
 }

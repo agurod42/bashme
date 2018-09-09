@@ -1,5 +1,4 @@
 import { Work } from '../../resume/properties';
-import { arrayToAsciiTable } from '../util';
 import { Command } from '.';
 
 export class WorkCommand implements Command<Work> {
@@ -13,8 +12,8 @@ export class WorkCommand implements Command<Work> {
         this.work = work;
     }
 
-    run(): string {
-        return arrayToAsciiTable(this.work);
+    run(): Array<Work> {
+        return this.work;
     }
 
 }

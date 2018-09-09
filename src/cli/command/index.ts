@@ -19,6 +19,8 @@ export interface Command<T> {
     description: string;
     helpTopic?: HelpTopic;
 
-    run(args?: minimist.ParsedArgs): string;
+    run(args?: minimist.ParsedArgs): CommandOutput;
 
 }
+
+export type CommandOutput = number | string | object | Array<any>;

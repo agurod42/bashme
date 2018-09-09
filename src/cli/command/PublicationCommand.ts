@@ -1,5 +1,4 @@
 import { Publication } from '../../resume/properties';
-import { arrayToAsciiTable } from '../util';
 import { Command } from '.';
 
 export class PublicationCommand implements Command<Publication> {
@@ -14,8 +13,8 @@ export class PublicationCommand implements Command<Publication> {
         this.publication = publication;
     }
 
-    run(): string {
-        return arrayToAsciiTable(this.publication);
+    run(): Array<Publication> {
+        return this.publication;
     }
 
 }

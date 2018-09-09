@@ -15,8 +15,8 @@ export class DebugCommand implements Command<any> {
         });
     }
 
-    run(args: minimist.ParsedArgs): string {
-        return JSON.stringify(args, null, 2);
+    run(args: minimist.ParsedArgs): object {
+        return args;
     }
 
 }
