@@ -1,6 +1,6 @@
 {
   "name": "bashme",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "👨‍💻👩‍💻 The first command line interface about you",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

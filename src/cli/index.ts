@@ -130,7 +130,8 @@ export class Cli {
                 if (!output.length) return '';
 
                 let cols = Object.keys(output[0]).length;
-                let colWidths = Array(cols).fill(Math.floor((this.terminal.cols - 6) / cols));
+                let colWidths = Array(cols).fill(Math.floor(this.terminal.cols / cols - 1));
+                colWidths[colWidths.length - 1] += this.terminal.cols % cols - 1;
 
                 let table = new Table({
                     colWidths: colWidths,
