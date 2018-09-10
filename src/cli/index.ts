@@ -109,7 +109,7 @@ export class Cli {
             }
             else if (cmd) {
                 let output = cmd.run(args);
-                this.write(`\r\n${this.processOutput(output)}`);
+                this.write(`\r\n${this.processCommandOutput(output)}`);
             }
             else {
                 this.write(`\r\n${cmdName}: command not found`);
@@ -123,7 +123,7 @@ export class Cli {
         this.buffer = '';
     }
 
-    private processOutput(output: CommandOutput): string {
+    private processCommandOutput(output: CommandOutput): string {
         if (typeof output === 'object') {
             if (Array.isArray(output)) {
                 // print as table
