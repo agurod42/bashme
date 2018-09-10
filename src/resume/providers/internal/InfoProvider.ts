@@ -1,9 +1,9 @@
-import { Cli } from '../../../cli';
+import { Command } from '../../../cli/command';
 import { Resume } from '../..';
 
 export interface InfoProvider {
 
     fill(resume: Resume): void;
-    registerCommands(cli: Cli): void;
+    getCommands(): Array<Command<any>>;
     
 }

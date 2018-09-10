@@ -18,7 +18,7 @@ export default class Bashme {
 
     use(infoProvider: InfoProvider): Bashme {
         infoProvider.fill(this.resume);
-        infoProvider.registerCommands(this.cli);
+        infoProvider.getCommands().forEach(command => this.cli.register(command));
         return this;
     }
     

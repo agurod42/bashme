@@ -10,4 +10,3 @@ export * from './internal/VolunteerProvider';
 export * from './internal/WorkProvider';
 
 export * from './Json';
-export * from './LinkedIn';

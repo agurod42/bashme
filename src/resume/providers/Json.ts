@@ -1,5 +1,4 @@
-import { Cli } from '../../cli';
-import { AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, PublicationCommand, SkillCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
+import { Command, AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, PublicationCommand, SkillCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
 import { Resume } from '../../resume';
 import { Award, Education, Language, Publication, Skill, Volunteer, Work } from '../../resume/properties';
 import { IntroProvider, AwardProvider, EducationProvider, LanguageProvider, PublicationProvider, SkillProvider, VolunteerProvider, WorkProvider } from '../../resume/providers';
@@ -60,42 +59,46 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
         resume.addLanguage(this.getLanguage());
     }
 
-    registerCommands(cli: Cli): void {
+    getCommands(): Array<Command<any>> {
+        let commands: Array<Command<any>> = [];
+
         if (this.data.name) {
-            cli.register(new AnyStringCommand('name', 'Shows name', this.data.name));
+            commands.push(new AnyStringCommand('name', 'Shows name', this.data.name));
         }
 
         if (this.data.bio) {
-            cli.register(new AnyStringCommand('bio', 'Shows bio', this.data.bio));
+            commands.push(new AnyStringCommand('bio', 'Shows bio', this.data.bio));
         }
 
         if (this.data.education && this.data.education.length) {
-            cli.register(new EducationCommand(this.data.education));
+            commands.push(new EducationCommand(this.data.education));
         }
 
         if (this.data.work && this.data.work.length) {
-            cli.register(new WorkCommand(this.data.work));
+            commands.push(new WorkCommand(this.data.work));
         }
 
         if (this.data.volunteer && this.data.volunteer.length) {
-            cli.register(new VolunteerCommand(this.data.volunteer));
+            commands.push(new VolunteerCommand(this.data.volunteer));
         }
 
         if (this.data.award && this.data.award.length) {
-            cli.register(new AwardCommand(this.data.award));
+            commands.push(new AwardCommand(this.data.award));
         }
 
         if (this.data.publication && this.data.publication.length) {
-            cli.register(new PublicationCommand(this.data.publication));
+            commands.push(new PublicationCommand(this.data.publication));
         }
 
         if (this.data.skill && this.data.skill.length) {
-            cli.register(new SkillCommand(this.data.skill));
+            commands.push(new SkillCommand(this.data.skill));
         }
 
         if (this.data.language && this.data.language.length) {
-            cli.register(new LanguageCommand(this.data.language));
+            commands.push(new LanguageCommand(this.data.language));
         }
+
+        return commands;
     }
 
 }
