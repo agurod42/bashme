@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import * as minimist from 'minimist';
 
 import { HelpTopic } from '../helpTopic';
 
