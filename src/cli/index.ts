@@ -197,6 +197,8 @@ export class Cli {
 
         fit(this.terminal);
         webLinksInit(this.terminal);
+
+        window.onresize = () => fit(this.terminal);
     }
 
     write(str: string) {
