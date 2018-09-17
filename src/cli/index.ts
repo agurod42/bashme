@@ -56,6 +56,7 @@ export class Cli {
                     break;
                 case 13: // enter
                     this.processInput();
+                    this.prompt(this.terminalHistory[this.terminalHistoryIndex - 1] !== 'clear');
                     break;
                 case 65: // up
                     var cmd = this.terminalHistory[this.terminalHistoryIndex - 1];
@@ -120,8 +121,6 @@ export class Cli {
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
-
-            this.prompt(cmdName !== 'clear');
         }
         
         this.cursorOffset = 0;
