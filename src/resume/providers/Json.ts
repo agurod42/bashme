@@ -1,9 +1,9 @@
-import { Command, AwardsCommand, EducationCommand, AnyStringCommand, LanguagesCommand, PublicationCommand, SkillsCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
+import { Command, AwardsCommand, EducationCommand, AnyStringCommand, LanguagesCommand, PublicationsCommand, SkillsCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
 import { Resume } from '../../resume';
 import { Award, Education, Language, Publication, Skill, Volunteer, Work } from '../../resume/properties';
-import { IntroProvider, AwardProvider, EducationProvider, LanguageProvider, PublicationProvider, SkillProvider, VolunteerProvider, WorkProvider } from '../../resume/providers';
+import { IntroProvider, AwardsProvider, EducationProvider, LanguagesProvider, PublicationsProvider, SkillsProvider, VolunteerProvider, WorkProvider } from '../../resume/providers';
 
-export class Json implements IntroProvider, AwardProvider, EducationProvider, LanguageProvider, PublicationProvider, SkillProvider, VolunteerProvider, WorkProvider {
+export class Json implements IntroProvider, AwardsProvider, EducationProvider, LanguagesProvider, PublicationsProvider, SkillsProvider, VolunteerProvider, WorkProvider {
 
     private data: any;
 
@@ -31,19 +31,19 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
         return this.data.volunteer || [];
     }
 
-    getAward(): Array<Award> {
+    getAwards(): Array<Award> {
         return this.data.award || [];
     }
 
-    getPublication(): Array<Publication> {
+    getPublications(): Array<Publication> {
         return this.data.publication || [];
     }
 
-    getSkill(): Array<Skill> {
+    getSkills(): Array<Skill> {
         return this.data.skill || [];
     }
 
-    getLanguage(): Array<Language> {
+    getLanguages(): Array<Language> {
         return this.data.language || [];
     }
     
@@ -53,21 +53,21 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
         resume.addEducation(this.getEducation());
         resume.addWork(this.getWork());
         resume.addVolunteer(this.getVolunteer());
-        resume.addAward(this.getAward());
-        resume.addPublication(this.getPublication());
-        resume.addSkill(this.getSkill());
-        resume.addLanguage(this.getLanguage());
+        resume.addAwards(this.getAwards());
+        resume.addPublications(this.getPublications());
+        resume.addSkills(this.getSkills());
+        resume.addLanguages(this.getLanguages());
     }
 
     getCommands(): Array<Command<any>> {
         let commands: Array<Command<any>> = [];
 
         if (this.data.name) {
-            commands.push(new AnyStringCommand('name', 'Shows name', this.data.name));
+            commands.push(new AnyStringCommand('name', 'shows name', this.data.name));
         }
 
         if (this.data.bio) {
-            commands.push(new AnyStringCommand('bio', 'Shows bio', this.data.bio));
+            commands.push(new AnyStringCommand('bio', 'shows bio', this.data.bio));
         }
 
         if (this.data.education && this.data.education.length) {
@@ -82,20 +82,20 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
             commands.push(new VolunteerCommand(this.data.volunteer));
         }
 
-        if (this.data.award && this.data.award.length) {
-            commands.push(new AwardsCommand(this.data.award));
+        if (this.data.awards && this.data.awards.length) {
+            commands.push(new AwardsCommand(this.data.awards));
         }
 
-        if (this.data.publication && this.data.publication.length) {
-            commands.push(new PublicationCommand(this.data.publication));
+        if (this.data.publications && this.data.publications.length) {
+            commands.push(new PublicationsCommand(this.data.publications));
         }
 
-        if (this.data.skill && this.data.skill.length) {
-            commands.push(new SkillsCommand(this.data.skill));
+        if (this.data.skills && this.data.skills.length) {
+            commands.push(new SkillsCommand(this.data.skills));
         }
 
-        if (this.data.language && this.data.language.length) {
-            commands.push(new LanguagesCommand(this.data.language));
+        if (this.data.languages && this.data.languages.length) {
+            commands.push(new LanguagesCommand(this.data.languages));
         }
 
         return commands;

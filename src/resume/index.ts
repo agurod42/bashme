@@ -7,10 +7,10 @@ export class Resume {
     public education: Array<Education> = [];
     public work: Array<Work> = [];
     public volunteer: Array<Volunteer> = [];
-    public award: Array<Award> = [];
-    public publication: Array<Publication> = [];
-    public skill: Array<Skill> = [];
-    public language: Array<Language> = [];
+    public awards: Array<Award> = [];
+    public publications: Array<Publication> = [];
+    public skills: Array<Skill> = [];
+    public languages: Array<Language> = [];
 
     addEducation(education: Array<Education>) {
         this.education = this.education.concat(education);
@@ -24,20 +24,20 @@ export class Resume {
         this.volunteer = this.volunteer.concat(volunteer);
     }
 
-    addAward(award: Array<Award>) {
-        this.award = this.award.concat(award);
+    addAwards(awards: Array<Award>) {
+        this.awards = this.awards.concat(awards);
     }
 
-    addPublication(publication: Array<Publication>) {
-        this.publication = this.publication.concat(publication);
+    addPublications(publications: Array<Publication>) {
+        this.publications = this.publications.concat(publications);
     }
 
-    addSkill(skill: Array<Skill>) {
-        this.skill = this.skill.concat(skill);
+    addSkills(skills: Array<Skill>) {
+        this.skills = this.skills.concat(skills);
     }
 
-    addLanguage(language: Array<Language>) {
-        this.language = this.language.concat(language);
+    addLanguages(languages: Array<Language>) {
+        this.languages = this.languages.concat(languages);
     }
 
 }

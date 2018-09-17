@@ -4,7 +4,7 @@ import { Publication } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
 import { Command } from '.';
 
-export class PublicationCommand implements Command<Publication> {
+export class PublicationsCommand implements Command<Publication> {
 
     private publications: Array<Publication>;
 
