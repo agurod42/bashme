@@ -53,7 +53,7 @@ export class Cli {
                     }
                     break;
                 case 13: // enter
-                    this.parseInput();
+                    this.processInput();
                     this.prompt();
                     break;
                 case 65: // up
@@ -96,7 +96,7 @@ export class Cli {
         }
     }
 
-    private parseInput() {
+    private processInput() {
         let buffer = this.buffer.trim();
 
         if (buffer) {
