@@ -8,6 +8,8 @@ import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 import { Command, CommandOutput } from './command';
 import { HelpTopic } from './helpTopic';
 
+const EOL = '\r\n';
+
 export class Cli {
 
     private commands: { [key: string]: Command<any>; } = {};
@@ -110,10 +112,10 @@ export class Cli {
             }
             else if (this.commands[cmdName]) {
                 let output = this.commands[cmdName].run(args);
-                this.write(`\r\n${this.processCommandOutput(output)}`);
+                this.write(`${EOL}${this.processCommandOutput(output)}`);
             }
             else {
-                this.write(`\r\n${cmdName}: command not found`);
+                this.write(`${EOL}${cmdName}: command not found`);
             }
 
             this.terminalHistory.push(buffer);
@@ -160,7 +162,7 @@ export class Cli {
     }
 
     private prompt(newLine: boolean = true) {
-        this.terminal.write(`${newLine ? '\r\n' : ''}${this.terminalPrompt}`);
+        this.terminal.write(`${newLine ? EOL : ''}${this.terminalPrompt}`);
     }
 
     private showHelp() {
@@ -173,15 +175,15 @@ export class Cli {
             table.newRow();
         }
         
-        this.terminal.write('\r\n\r\nThese commands are defined.\r\nType `help name` to find out more about the function `name`.\r\n\r\n\t' + table.print().replace(/\r?\n/g, '\r\n\t'));
+        this.terminal.write(`${EOL}${EOL}These commands are defined.${EOL}Type \`help name\` to find out more about the function \`name\`.${EOL}${EOL}\t${table.print().replace(/\r?\n/g, `${EOL}\t`)}`);
     }
 
     private showHelpTopic(cmdName: string) {
         if (this.helpTopics[cmdName]) {
-            this.write('\r\n\r\n' + this.helpTopics[cmdName] + '\r\n');
+            this.write(`${EOL}${EOL}${this.helpTopics[cmdName]}${EOL}`);
         }
         else {
-            this.write(`\r\nno help topics match \`${cmdName}\``);
+            this.write(`${EOL}no help topics match \`${cmdName}\``);
         }
     }
 
