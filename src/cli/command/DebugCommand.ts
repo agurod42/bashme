@@ -11,7 +11,7 @@ export class DebugCommand implements Command<any> {
 
     constructor() {
         this.helpTopic = new HelpTopic(this, {
-             
+             synopsis: 'debug'
         });
     }
 

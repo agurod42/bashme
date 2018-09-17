@@ -9,7 +9,7 @@ export class EducationCommand implements Command<Education> {
     private education: Array<Education>;
 
     public name: string = 'education';
-    public description: string = 'Shows education';
+    public description: string = 'shows education';
     public helpTopic: HelpTopic;
 
     constructor(education: Array<Education>) {

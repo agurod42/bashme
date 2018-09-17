@@ -1,4 +1,4 @@
-import { Command, AwardCommand, EducationCommand, AnyStringCommand, LanguageCommand, PublicationCommand, SkillCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
+import { Command, AwardsCommand, EducationCommand, AnyStringCommand, LanguagesCommand, PublicationCommand, SkillsCommand, VolunteerCommand, WorkCommand } from '../../cli/command';
 import { Resume } from '../../resume';
 import { Award, Education, Language, Publication, Skill, Volunteer, Work } from '../../resume/properties';
 import { IntroProvider, AwardProvider, EducationProvider, LanguageProvider, PublicationProvider, SkillProvider, VolunteerProvider, WorkProvider } from '../../resume/providers';
@@ -83,7 +83,7 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
         }
 
         if (this.data.award && this.data.award.length) {
-            commands.push(new AwardCommand(this.data.award));
+            commands.push(new AwardsCommand(this.data.award));
         }
 
         if (this.data.publication && this.data.publication.length) {
@@ -91,11 +91,11 @@ export class Json implements IntroProvider, AwardProvider, EducationProvider, La
         }
 
         if (this.data.skill && this.data.skill.length) {
-            commands.push(new SkillCommand(this.data.skill));
+            commands.push(new SkillsCommand(this.data.skill));
         }
 
         if (this.data.language && this.data.language.length) {
-            commands.push(new LanguageCommand(this.data.language));
+            commands.push(new LanguagesCommand(this.data.language));
         }
 
         return commands;

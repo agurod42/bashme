@@ -5,11 +5,11 @@ import { HelpTopic } from '../helpTopic';
 export * from './AnyStringCommand';
 export * from './DebugCommand';
 
-export * from './AwardCommand';
+export * from './AwardsCommand';
 export * from './EducationCommand';
-export * from './LanguageCommand';
-export * from './PublicationCommand';
-export * from './SkillCommand';
+export * from './LanguagesCommand';
+export * from './PublicationsCommand';
+export * from './SkillsCommand';
 export * from './VolunteerCommand';
 export * from './WorkCommand';
 
