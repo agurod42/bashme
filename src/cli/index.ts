@@ -54,7 +54,6 @@ export class Cli {
                     break;
                 case 13: // enter
                     this.processInput();
-                    this.prompt();
                     break;
                 case 65: // up
                     var cmd = this.terminalHistory[this.terminalHistoryIndex - 1];
@@ -102,13 +101,15 @@ export class Cli {
         if (buffer) {
             let args = minimist(buffer.split(' '));
             let cmdName = args._[0];
-            let cmd = this.commands[cmdName];
             
-            if (cmdName === 'help') {
+            if (cmdName === 'clear') {
+                this.terminal.reset();
+            }
+            else if (cmdName === 'help') {
                 args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
             }
-            else if (cmd) {
-                let output = cmd.run(args);
+            else if (this.commands[cmdName]) {
+                let output = this.commands[cmdName].run(args);
                 this.write(`\r\n${this.processCommandOutput(output)}`);
             }
             else {
@@ -117,6 +118,8 @@ export class Cli {
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
+
+            this.prompt(cmdName !== 'clear');
         }
         
         this.cursorOffset = 0;
