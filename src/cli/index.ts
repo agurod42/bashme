@@ -1,6 +1,7 @@
 import Table from 'cli-table2';
 import EasyTable from 'easy-table';
-import minimist from 'minimist';
+import { EventEmitter } from 'events';
+import minimist, { ParsedArgs } from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
@@ -10,7 +11,7 @@ import { HelpTopic } from './helpTopic';
 
 const EOL = '\r\n';
 
-export class Cli {
+export class Cli extends EventEmitter {
 
     private commands: { [key: string]: Command<any>; } = {};
     private helpTopics: { [key: string]: HelpTopic } = {};
@@ -23,6 +24,8 @@ export class Cli {
     private terminalHistoryIndex = 0;
 
     constructor() {
+        super();
+
         this.terminal = new Terminal({
             convertEol: true,
             cursorBlink: true,
@@ -105,19 +108,7 @@ export class Cli {
             let args = minimist(buffer.split(' '));
             let cmdName = args._[0];
             
-            if (cmdName === 'clear') {
-                this.terminal.reset();
-            }
-            else if (cmdName === 'help') {
-                args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
-            }
-            else if (this.commands[cmdName]) {
-                let output = this.commands[cmdName].run(args);
-                this.write(`${EOL}${this.processCommandOutput(output)}`);
-            }
-            else {
-                this.write(`${EOL}${cmdName}: command not found`);
-            }
+            this.processCommand(cmdName, args);
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
@@ -125,6 +116,29 @@ export class Cli {
         
         this.cursorOffset = 0;
         this.buffer = '';
+    }
+
+    private processCommand(cmdName: string, args: minimist.ParsedArgs) {
+        let commandFound = true;
+
+        if (cmdName === 'clear') {
+            this.terminal.reset();
+        }
+        else if (cmdName === 'help') {
+            args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
+        }
+        else if (this.commands[cmdName]) {
+            let output = this.commands[cmdName].run(args);
+            this.write(`${EOL}${this.processCommandOutput(output)}`);
+        }
+        else {
+            commandFound = false;
+            this.write(`${EOL}${cmdName}: command not found`);
+        }
+
+        if (commandFound) {
+            this.emit('command', cmdName, args);
+        }
     }
 
     private processCommandOutput(output: CommandOutput): string {
