@@ -108,6 +108,8 @@ export class Cli extends EventEmitter {
             let args = minimist(buffer.split(' '));
             let cmdName = args._[0];
             
+            this.emit('input', cmdName, args);
+
             this.processCommand(cmdName, args);
 
             this.terminalHistory.push(buffer);
@@ -119,8 +121,6 @@ export class Cli extends EventEmitter {
     }
 
     private processCommand(cmdName: string, args: minimist.ParsedArgs) {
-        let commandFound = true;
-
         if (cmdName === 'clear') {
             this.terminal.reset();
         }
@@ -132,12 +132,7 @@ export class Cli extends EventEmitter {
             this.write(`${EOL}${this.processCommandOutput(output)}`);
         }
         else {
-            commandFound = false;
             this.write(`${EOL}${cmdName}: command not found`);
-        }
-
-        if (commandFound) {
-            this.emit('command', cmdName, args);
         }
     }
 
