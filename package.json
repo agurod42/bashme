@@ -1,11 +1,15 @@
 {
   "name": "bashme",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "👨‍💻👩‍💻 The first command line interface about you",
+  "repository": {
+    "url": "https://github.com/agurodriguez/bashme.git"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -fr dist && tsc && cp node_modules/xterm/dist/xterm.css dist && node_modules/.bin/webpack",
+    "prepublish": "npm run build",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts"
   },
   "author": "agurodriguez",

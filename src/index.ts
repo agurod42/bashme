@@ -13,7 +13,7 @@ export default class Bashme extends EventEmitter {
         super();
 
         this.cli = new Cli();
-        this.cli.on('command', (...args) => this.emit('command', ...args));
+        this.cli.on('input', (...args) => this.emit('input', ...args));
 
         if (debugMode) {
             this.cli.register(new DebugCommand());
