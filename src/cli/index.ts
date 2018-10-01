@@ -183,6 +183,13 @@ export class Cli extends EventEmitter {
         }
 
         let table = new Table({
+            chars: {
+                'top': ' ','top-mid': ' ', 'top-left': ' ', 'top-right': ' ',
+                'bottom': ' ','bottom-mid': ' ', 'bottom-left': ' ', 'bottom-right': ' ',
+                'mid': '-', 'mid-mid': '|', 'middle': '|',
+                'left': ' ', 'left-mid': ' ',
+                'right': ' ', 'right-mid': ' '
+            },
             colWidths: colWidths,
             head: Object.keys(output[0]),
             wordWrap: true,
