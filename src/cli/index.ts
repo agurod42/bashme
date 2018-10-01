@@ -120,7 +120,7 @@ export class Cli extends EventEmitter {
         this.buffer = '';
     }
 
-    private processCommand(cmdName: string, args: minimist.ParsedArgs) {
+    private processCommand(cmdName: string, args: ParsedArgs) {
         if (cmdName === 'clear') {
             this.terminal.reset();
         }
@@ -140,24 +140,7 @@ export class Cli extends EventEmitter {
         if (typeof output === 'object') {
             if (Array.isArray(output)) {
                 // print as table
-                if (!output.length) return '';
-
-                let cols = Object.keys(output[0]).length;
-                let colWidths = Array(cols).fill(Math.floor(this.terminal.cols / cols - 1));
-                colWidths[colWidths.length - 1] += this.terminal.cols % cols - 1;
-
-                let table = new Table({
-                    colWidths: colWidths,
-                    head: Object.keys(output[0]),
-                    wordWrap: true,
-                });
-                    
-                output.forEach(item => {
-                    // @ts-ignore
-                    table.push(Object.values(item));
-                });
-                
-                return table.toString();
+                return this.processCommandOutputAsTable(output);
             }
             else {
                 // print as json
@@ -167,6 +150,50 @@ export class Cli extends EventEmitter {
         else {
             return output.toString();
         }
+    }
+
+    private processCommandOutputAsTable(output: Array<any>): string {
+        if (!output.length) return '';
+
+        // try to estimate the maximun row width 
+        let estimatedMaxRowWidth = 0;
+        let strlen = (o: any) => ('' + o).length;
+
+        try {
+            output.forEach(item => {
+                let estimatedRowWidth = 1;
+                for (let k in item) {
+                    estimatedRowWidth += strlen(item[k]) + 3;
+                }
+                if (estimatedRowWidth > estimatedMaxRowWidth) {
+                    estimatedMaxRowWidth = estimatedRowWidth;
+                }
+            });
+        }
+        catch (err) {
+        }
+
+        let colWidths = [];
+
+        // if it's needed calculate the last column's width so the entire table fits in the terminal 
+        if (estimatedMaxRowWidth > this.terminal.cols) {
+            let cols = Object.keys(output[0]).length;
+            colWidths = Array(cols).fill(Math.floor(this.terminal.cols / cols - 1));
+            colWidths[cols - 1] += this.terminal.cols % cols - 1;
+        }
+
+        let table = new Table({
+            colWidths: colWidths,
+            head: Object.keys(output[0]),
+            wordWrap: true,
+        });
+        
+        output.forEach(item => {
+            // @ts-ignore
+            table.push(Object.values(item));
+        });
+        
+        return table.toString();
     }
 
     private prompt(newLine: boolean = true) {
