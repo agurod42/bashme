@@ -108,25 +108,26 @@ export class Cli extends EventEmitter {
             this.emit('input', buffer);
 
             let args = minimist(buffer.split(' '));
-            let argQueue = args._.slice(0);
+            let argsQueue = args._.slice(0);
             let command: Command<any> | undefined = undefined;
             let commands = this.commands;
 
-            while (argQueue.length) {
-                let arg = argQueue.shift()!;
-                if (commands[arg]) {
-                    command = commands[arg];
-                    // @ts-ignore
-                    commands = command.subCommands;
-                }
-                else {
-                    break;
-                }
-            }
+            while (argsQueue.length) {
+                let arg = argsQueue.shift();
+                
+                if (!arg) break;
+                if (!commands[arg]) break; 
 
+                command = commands[arg];
+                // @ts-ignore
+                commands = command.subCommands;
+
+                if (!commands) break;
+            }
+            
             if (command !== undefined) {
-                let output = command.run(args);
-                this.write(`${EOL}${this.processCommandOutput(output)}`);
+                let output = command.run({ ...args, _: argsQueue });
+                this.write(`${output ? EOL : ''}${this.processCommandOutput(output)}`);
             }
             else {
                 this.write(`${EOL}${args._[0]}: command not found`);

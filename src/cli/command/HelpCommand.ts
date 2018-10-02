@@ -15,7 +15,7 @@ export class HelpCommand implements Command<any> {
     }
 
     run(args: minimist.ParsedArgs): void {
-        if (args._.length) {
+        if (args._.length > 0) {
             this.cli.helpTopic(args._[0]);
         }
         else {
