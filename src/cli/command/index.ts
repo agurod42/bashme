@@ -1,11 +1,10 @@
-import * as minimist from 'minimist';
+import minimist from 'minimist';
 
 import { HelpTopic } from '../helpTopic';
 
 export * from './AnyStringCommand';
 export * from './ClearCommand';
 export * from './DebugCommand';
-export * from './DebugSubCommand';
 export * from './HelpCommand';
 
 export * from './AwardsCommand';

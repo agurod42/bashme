@@ -1,4 +1,4 @@
-import * as minimist from 'minimist';
+import minimist from 'minimist';
 
 import { Award } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';

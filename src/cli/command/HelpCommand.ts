@@ -1,4 +1,4 @@
-import * as minimist from 'minimist';
+import minimist from 'minimist';
 
 import { Command } from '.';
 import { Cli } from '../../cli';

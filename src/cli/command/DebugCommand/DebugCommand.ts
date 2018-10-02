@@ -1,7 +1,8 @@
-import * as minimist from 'minimist';
+import minimist from 'minimist';
 
-import { Command, SubCommand, DebugSubCommand } from '.';
-import { HelpTopic } from '../helpTopic';
+import { DebugSubCommand } from './DebugSubCommand';
+import { Command, SubCommand } from '..';
+import { HelpTopic } from '../../helpTopic';
 
 export class DebugCommand implements Command<any> {
 
