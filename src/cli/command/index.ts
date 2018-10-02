@@ -3,7 +3,10 @@ import * as minimist from 'minimist';
 import { HelpTopic } from '../helpTopic';
 
 export * from './AnyStringCommand';
+export * from './ClearCommand';
 export * from './DebugCommand';
+export * from './DebugSubCommand';
+export * from './HelpCommand';
 
 export * from './AwardsCommand';
 export * from './EducationCommand';
@@ -18,9 +21,16 @@ export interface Command<T> {
     name: string;
     description: string;
     helpTopic?: HelpTopic;
+    subCommands?: { [key: string]: SubCommand<T> };
 
     run(args?: minimist.ParsedArgs): CommandOutput;
 
 }
 
-export type CommandOutput = number | string | object | Array<any>;
+export interface SubCommand<T> extends Command<T> {
+
+    parent: Command<T>;
+
+}
+
+export type CommandOutput = void | number | string | object | Array<any>;

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { Cli } from './cli';
-import { DebugCommand } from './cli/command';
+import { ClearCommand, DebugCommand, HelpCommand } from './cli/command';
 import { Resume } from './resume';
 import { InfoProvider } from './resume/providers';
 
@@ -14,6 +14,9 @@ export default class Bashme extends EventEmitter {
 
         this.cli = new Cli();
         this.cli.on('input', (...args) => this.emit('input', ...args));
+
+        this.cli.register(new ClearCommand(this.cli));
+        this.cli.register(new HelpCommand(this.cli));
 
         if (debugMode) {
             this.cli.register(new DebugCommand());

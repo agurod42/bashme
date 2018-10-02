@@ -1,7 +1,7 @@
 import Table from 'cli-table2';
 import EasyTable from 'easy-table';
 import { EventEmitter } from 'events';
-import minimist, { ParsedArgs } from 'minimist';
+import minimist from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
@@ -105,12 +105,32 @@ export class Cli extends EventEmitter {
         let buffer = this.buffer.trim();
 
         if (buffer) {
-            let args = minimist(buffer.split(' '));
-            let cmdName = args._[0];
-            
-            this.emit('input', cmdName, args);
+            this.emit('input', buffer);
 
-            this.processCommand(cmdName, args);
+            let args = minimist(buffer.split(' '));
+            let argQueue = args._.slice(0);
+            let command: Command<any> | undefined = undefined;
+            let commands = this.commands;
+
+            while (argQueue.length) {
+                let arg = argQueue.shift()!;
+                if (commands[arg]) {
+                    command = commands[arg];
+                    // @ts-ignore
+                    commands = command.subCommands;
+                }
+                else {
+                    break;
+                }
+            }
+
+            if (command !== undefined) {
+                let output = command.run(args);
+                this.write(`${EOL}${this.processCommandOutput(output)}`);
+            }
+            else {
+                this.write(`${EOL}${args._[0]}: command not found`);
+            }
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
@@ -118,22 +138,6 @@ export class Cli extends EventEmitter {
         
         this.cursorOffset = 0;
         this.buffer = '';
-    }
-
-    private processCommand(cmdName: string, args: ParsedArgs) {
-        if (cmdName === 'clear') {
-            this.terminal.reset();
-        }
-        else if (cmdName === 'help') {
-            args._[1] ? this.showHelpTopic(args._[1]) : this.showHelp();
-        }
-        else if (this.commands[cmdName]) {
-            let output = this.commands[cmdName].run(args);
-            this.write(`${EOL}${this.processCommandOutput(output)}`);
-        }
-        else {
-            this.write(`${EOL}${cmdName}: command not found`);
-        }
     }
 
     private processCommandOutput(output: CommandOutput): string {
@@ -148,7 +152,7 @@ export class Cli extends EventEmitter {
             }
         }
         else {
-            return output.toString();
+            return output ? output.toString() : '';
         }
     }
 
@@ -207,7 +211,12 @@ export class Cli extends EventEmitter {
         this.terminal.write(`${newLine ? EOL : ''}${this.terminalPrompt}`);
     }
 
-    private showHelp() {
+    clear() {
+        this.terminal.reset();
+    }
+
+    // TODO: Move to HelpCommand
+    help() {
         let table = new EasyTable();
         table.separator = '\t\t';
 
@@ -220,7 +229,8 @@ export class Cli extends EventEmitter {
         this.terminal.write(`${EOL}${EOL}These commands are defined.${EOL}Type \`help name\` to find out more about the function \`name\`.${EOL}${EOL}\t${table.print().replace(/\r?\n/g, `${EOL}\t`)}`);
     }
 
-    private showHelpTopic(cmdName: string) {
+    // TODO: Move to HelpCommand
+    helpTopic(cmdName: string) {
         if (this.helpTopics[cmdName]) {
             this.write(`${EOL}${EOL}${this.helpTopics[cmdName]}${EOL}`);
         }
