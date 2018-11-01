@@ -12,7 +12,11 @@
     </body>
     <script type="text/javascript" src="../dist/bundle.js"></script>
     <script>
-        var bashme = new Bashme.default(true);
+        var bashme = new Bashme.default({
+            debug: true,
+            welcomeMessage: 'Welcome to bashme, the first command line interface about you. Please type `help` to get started'
+        });
+
         bashme.use(new Bashme.Json(
             {
                 "name": "Agustín Rodríguez",

@@ -1,6 +1,6 @@
 {
   "name": "bashme",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "👨‍💻👩‍💻 The first command line interface about you",
   "repository": {
     "url": "https://github.com/agurodriguez/bashme.git"
@@ -18,23 +18,23 @@
     "cli-table2": "^0.2.0",
     "easy-table": "^1.1.1",
     "minimist": "^1.2.0",
-    "xterm": "^3.7.0"
+    "xterm": "^3.8.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.4",
+    "@types/chai": "^4.1.7",
     "@types/cli-table2": "^0.2.1",
     "@types/easy-table": "0.0.31",
     "@types/inquirer": "0.0.43",
     "@types/minimist": "^1.2.0",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.9.4",
-    "chai": "^4.1.2",
-    "dotenv": "^6.0.0",
+    "@types/node": "^10.12.1",
+    "chai": "^4.2.0",
+    "dotenv": "^6.1.0",
     "mocha": "^5.2.0",
-    "ts-loader": "^5.0.0",
+    "ts-loader": "^5.3.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.0.3",
-    "webpack": "^4.17.2",
-    "webpack-cli": "^3.1.0"
+    "typescript": "^3.1.5",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
   }
 }

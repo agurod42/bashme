@@ -11,6 +11,11 @@ import { HelpTopic } from './helpTopic';
 
 const EOL = '\r\n';
 
+export interface CliOptions {
+    prompt?: string,
+    welcomeMessage?: string
+}
+
 export class Cli extends EventEmitter {
 
     private commands: { [key: string]: Command<any>; } = {};
@@ -18,13 +23,17 @@ export class Cli extends EventEmitter {
 
     private buffer: string = '';
     private cursorOffset: number = 0;
+    private options: CliOptions = { prompt: '> ' };
     private terminal: Terminal;
-    private terminalPrompt: string = 'bashme$ ';
     private terminalHistory: Array<string> = [];
     private terminalHistoryIndex = 0;
 
-    constructor() {
+    constructor(options?: CliOptions) {
         super();
+
+        if (options) {
+            Object.assign(this.options, options);
+        }
 
         this.terminal = new Terminal({
             convertEol: true,
@@ -209,7 +218,7 @@ export class Cli extends EventEmitter {
     }
 
     private prompt(newLine: boolean = true) {
-        this.terminal.write(`${newLine ? EOL : ''}${this.terminalPrompt}`);
+        this.terminal.write(`${newLine ? EOL : ''}${this.options.prompt}`);
     }
 
     clear() {
@@ -251,6 +260,11 @@ export class Cli extends EventEmitter {
     show(domElement: HTMLElement) {
         this.terminal.open(domElement);
         this.terminal.focus();
+
+        if (this.options.welcomeMessage && this.options.welcomeMessage.length) {
+            this.write(`${this.options.welcomeMessage}${EOL}${EOL}`);
+        }
+
         this.prompt(false);
 
         fit(this.terminal);
