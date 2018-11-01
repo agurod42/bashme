@@ -8,7 +8,7 @@ export class HelpCommand implements Command<any> {
     private cli: Cli;
 
     public name: string = 'help';
-    public description: string = '';
+    public description: string = 'shows this help screen';
 
     constructor(cli: Cli) {
         this.cli = cli;
