@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { Volunteer } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
@@ -37,7 +37,7 @@ export class VolunteerCommand implements Command<Volunteer> {
         });
     }
 
-    run(args: minimist.ParsedArgs): Array<Volunteer> {
+    run(args: ParsedArgs): Array<Volunteer> {
         let data = this.volunteer;
 
         if (args.currentYear) {

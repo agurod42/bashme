@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { DebugSubCommand } from './DebugSubCommand';
 import { Command, SubCommand } from '..';
@@ -19,7 +19,7 @@ export class DebugCommand implements Command<any> {
         this.subCommands['test'] = new DebugSubCommand(this);
     }
 
-    run(args: minimist.ParsedArgs): object {
+    run(args: ParsedArgs): object {
         return args;
     }
 

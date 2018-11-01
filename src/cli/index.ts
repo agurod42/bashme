@@ -1,7 +1,7 @@
 import Table from 'cli-table2';
 import EasyTable from 'easy-table';
 import { EventEmitter } from 'events';
-import minimist from 'minimist';
+import * as minimist from 'minimist';
 import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
@@ -116,7 +116,7 @@ export class Cli extends EventEmitter {
         if (buffer) {
             this.emit('input', buffer);
 
-            let args = minimist(buffer.split(' '));
+            let args = minimist.default(buffer.split(' '));
             let argsQueue = args._.slice(0);
             let command: Command<any> | undefined = undefined;
             let commands = this.commands;

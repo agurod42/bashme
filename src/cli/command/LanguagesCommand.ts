@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { Language } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
@@ -28,7 +28,7 @@ export class LanguagesCommand implements Command<Language> {
         });
     }
 
-    run(args: minimist.ParsedArgs): Array<Language> {
+    run(args: ParsedArgs): Array<Language> {
         let data = this.languages;
 
         if (args.l) {

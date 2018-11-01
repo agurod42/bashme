@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { Award } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
@@ -28,7 +28,7 @@ export class AwardsCommand implements Command<Award> {
         });
     }
 
-    run(args: minimist.ParsedArgs): Array<Award> {
+    run(args: ParsedArgs): Array<Award> {
         let data = this.awards;
 
         if (args.y) {

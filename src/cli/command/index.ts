@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { HelpTopic } from '../helpTopic';
 
@@ -22,7 +22,7 @@ export interface Command<T> {
     helpTopic?: HelpTopic;
     subCommands?: { [key: string]: SubCommand<T> };
 
-    run(args?: minimist.ParsedArgs): CommandOutput;
+    run(args?: ParsedArgs): CommandOutput;
 
 }
 

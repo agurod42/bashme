@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { Skill } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
@@ -28,7 +28,7 @@ export class SkillsCommand implements Command<Skill> {
         });
     }
 
-    run(args: minimist.ParsedArgs): Array<Skill> {
+    run(args: ParsedArgs): Array<Skill> {
         let data = this.skills;
 
         if (args.l) {

@@ -1,4 +1,4 @@
-import minimist from 'minimist';
+import { ParsedArgs } from 'minimist';
 
 import { Work } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
@@ -37,7 +37,7 @@ export class WorkCommand implements Command<Work> {
         });
     }
 
-    run(args: minimist.ParsedArgs): Array<Work> {
+    run(args: ParsedArgs): Array<Work> {
         let data = this.work;
 
         if (args.current) {
