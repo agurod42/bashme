@@ -9,4 +9,5 @@ export * from './internal/SkillsProvider';
 export * from './internal/VolunteerProvider';
 export * from './internal/WorkProvider';
 
+export * from './GitHub';
 export * from './Json';

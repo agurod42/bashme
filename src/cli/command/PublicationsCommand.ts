@@ -2,9 +2,9 @@ import { ParsedArgs } from 'minimist';
 
 import { Publication } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
-import { Command } from '.';
+import { SyncCommand } from '.';
 
-export class PublicationsCommand implements Command<Publication> {
+export class PublicationsCommand implements SyncCommand {
 
     private publications: Array<Publication>;
 

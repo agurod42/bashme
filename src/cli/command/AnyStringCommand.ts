@@ -1,6 +1,6 @@
-import { Command } from '.';
+import { SyncCommand } from '.';
 
-export class AnyStringCommand implements Command<string> {
+export class AnyStringCommand implements SyncCommand {
 
     private string: string;
 

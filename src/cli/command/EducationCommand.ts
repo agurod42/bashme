@@ -2,9 +2,9 @@ import { ParsedArgs } from 'minimist';
 
 import { Education } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
-import { Command } from '.';
+import { SyncCommand } from '.';
 
-export class EducationCommand implements Command<Education> {
+export class EducationCommand implements SyncCommand {
 
     private education: Array<Education>;
 

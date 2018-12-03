@@ -2,9 +2,9 @@ import { ParsedArgs } from 'minimist';
 
 import { Award } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
-import { Command } from '.';
+import { SyncCommand } from '.';
 
-export class AwardsCommand implements Command<Award> {
+export class AwardsCommand implements SyncCommand {
 
     private awards: Array<Award>;
 

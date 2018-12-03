@@ -59,8 +59,8 @@ export class Json implements IntroProvider, AwardsProvider, EducationProvider, L
         resume.addLanguages(this.getLanguages());
     }
 
-    getCommands(): Array<Command<any>> {
-        let commands: Array<Command<any>> = [];
+    getCommands(): Array<Command> {
+        let commands: Array<Command> = [];
 
         if (this.data.name) {
             commands.push(new AnyStringCommand('name', 'shows name', this.data.name));

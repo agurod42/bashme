@@ -6,7 +6,7 @@ import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 
-import { Command, CommandOutput } from './command';
+import { AsyncCommand, Command, CommandOutput, isCommandAsync } from './command';
 import { HelpTopic } from './helpTopic';
 
 const EOL = '\r\n';
@@ -18,10 +18,11 @@ export interface CliOptions {
 
 export class Cli extends EventEmitter {
 
-    private commands: { [key: string]: Command<any>; } = {};
+    private commands: { [key: string]: Command; } = {};
     private helpTopics: { [key: string]: HelpTopic } = {};
 
     private buffer: string = '';
+    private commandRunning: boolean = false;
     private cursorOffset: number = 0;
     private options: CliOptions = { prompt: '> ' };
     private terminal: Terminal;
@@ -67,8 +68,8 @@ export class Cli extends EventEmitter {
                     }
                     break;
                 case 13: // enter
+                    this.terminal.write(EOL);
                     this.processInput();
-                    this.prompt(this.terminalHistory[this.terminalHistoryIndex - 1] !== 'clear');
                     break;
                 case 65: // up
                     var cmd = this.terminalHistory[this.terminalHistoryIndex - 1];
@@ -111,6 +112,8 @@ export class Cli extends EventEmitter {
     }
 
     private processInput() {
+        if (this.commandRunning) return;
+
         let buffer = this.buffer.trim();
 
         if (buffer) {
@@ -118,7 +121,7 @@ export class Cli extends EventEmitter {
 
             let args = minimist.default(buffer.split(' '));
             let argsQueue = args._.slice(0);
-            let command: Command<any> | undefined = undefined;
+            let command: Command | undefined = undefined;
             let commands = this.commands;
 
             while (argsQueue.length) {
@@ -135,19 +138,38 @@ export class Cli extends EventEmitter {
             }
             
             if (command !== undefined) {
-                let output = command.run({ ...args, _: argsQueue });
-                this.write(`${output ? EOL : ''}${this.processCommandOutput(output)}`);
+                this.commandRunning = true;
+                this.processCommand(command, { ...args, _: argsQueue })
+                    .then(output => {
+                        this.commandRunning = false;
+                        this.write(`${this.processCommandOutput(output)}`);
+                        if (buffer !== 'clear') this.write(EOL);
+                        this.prompt();
+                    });
             }
             else {
-                this.write(`${EOL}${args._[0]}: command not found`);
+                this.write(`${args._[0]}: command not found${EOL}`);
+                this.prompt();
             }
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
         }
+        else {
+            this.prompt();
+        }
         
         this.cursorOffset = 0;
         this.buffer = '';
+    }
+
+    private processCommand(command: Command, args: minimist.ParsedArgs): Promise<CommandOutput> {
+        if (isCommandAsync(command)) {
+            return (<AsyncCommand>command).run(args);
+        }
+        else {
+            return Promise.resolve(command.run(args));
+        }
     }
 
     private processCommandOutput(output: CommandOutput): string {
@@ -217,8 +239,8 @@ export class Cli extends EventEmitter {
         return table.toString();
     }
 
-    private prompt(newLine: boolean = true) {
-        this.terminal.write(`${newLine ? EOL : ''}${this.options.prompt}`);
+    private prompt() {
+        this.terminal.write(`${this.options.prompt}${this.buffer}`);
     }
 
     clear() {
@@ -236,20 +258,20 @@ export class Cli extends EventEmitter {
             table.newRow();
         }
         
-        this.terminal.write(`${EOL}${EOL}These commands are defined.${EOL}Type \`help name\` to find out more about the function \`name\`.${EOL}${EOL}\t${table.print().replace(/\r?\n/g, `${EOL}\t`)}`);
+        this.terminal.write(`${EOL}These commands are defined.${EOL}Type \`help name\` to find out more about the function \`name\`.${EOL}${EOL}\t${table.print().replace(/\r?\n/g, `${EOL}\t`)}`);
     }
 
     // TODO: Move to HelpCommand
     helpTopic(cmdName: string) {
         if (this.helpTopics[cmdName]) {
-            this.write(`${EOL}${EOL}${this.helpTopics[cmdName]}${EOL}`);
+            this.write(`${EOL}${this.helpTopics[cmdName]}${EOL}`);
         }
         else {
-            this.write(`${EOL}no help topics match \`${cmdName}\``);
+            this.write(`no help topics match \`${cmdName}\``);
         }
     }
 
-    register(command: Command<any>) {
+    register(command: Command) {
         this.commands[command.name] = command;
 
         if (command.helpTopic) {
@@ -265,7 +287,7 @@ export class Cli extends EventEmitter {
             this.write(`${this.options.welcomeMessage}${EOL}${EOL}`);
         }
 
-        this.prompt(false);
+        this.prompt();
 
         fit(this.terminal);
         webLinksInit(this.terminal);

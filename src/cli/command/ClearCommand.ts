@@ -1,7 +1,7 @@
-import { Command } from '.';
+import { SyncCommand } from '.';
 import { Cli } from '../../cli';
 
-export class ClearCommand implements Command<any> {
+export class ClearCommand implements SyncCommand {
 
     private cli: Cli;
 

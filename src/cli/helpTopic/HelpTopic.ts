@@ -3,10 +3,10 @@ import { HelpTopicArguments } from '.';
 
 export class HelpTopic {
 
-    private command: Command<any>;
+    private command: Command;
     private helpTopicArgs: HelpTopicArguments;
 
-    constructor(command: Command<any>, helpTopicArgs: HelpTopicArguments) {
+    constructor(command: Command, helpTopicArgs: HelpTopicArguments) {
         this.command = command;
         this.helpTopicArgs = helpTopicArgs;
     }

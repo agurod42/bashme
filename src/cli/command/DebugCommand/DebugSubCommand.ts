@@ -1,16 +1,11 @@
 import { ParsedArgs } from 'minimist';
 
-import { Command, SubCommand } from '..';
+import { SyncCommand } from '..';
 
-export class DebugSubCommand implements SubCommand<any> {
+export class DebugSubCommand implements SyncCommand {
 
     public name: string = 'test';
     public description: string = 'command used to debug subcommands';
-    public parent: Command<any>;
-
-    constructor(parent: Command<any>) {
-        this.parent = parent;
-    }
 
     run(args: ParsedArgs): object {
         return { 'debug': 'subcommand', ...args };

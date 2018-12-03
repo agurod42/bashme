@@ -1,9 +1,9 @@
 import { ParsedArgs } from 'minimist';
 
-import { Command } from '.';
+import { SyncCommand } from '.';
 import { Cli } from '../../cli';
 
-export class HelpCommand implements Command<any> {
+export class HelpCommand implements SyncCommand {
 
     private cli: Cli;
 

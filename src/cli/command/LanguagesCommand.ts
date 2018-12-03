@@ -2,9 +2,9 @@ import { ParsedArgs } from 'minimist';
 
 import { Language } from '../../resume/properties';
 import { HelpTopic } from '../helpTopic';
-import { Command } from '.';
+import { SyncCommand } from '.';
 
-export class LanguagesCommand implements Command<Language> {
+export class LanguagesCommand implements SyncCommand {
 
     private languages: Array<Language>;
 
