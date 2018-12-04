@@ -26,8 +26,20 @@ export class GitHubCommand extends AsyncCommand {
         this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit);
     }
 
-    run(args: ParsedArgs): Promise<void> {
-        return Promise.resolve();
+    run(args: ParsedArgs): Promise<any> {
+        return  this.octokit
+                    .users
+                    .getAuthenticated({})
+                    .then((res: any) => {
+                        return {
+                            name: res.data.name,
+                            url: res.data.html_url,
+                            email: res.data.email,
+                            followers: res.data.followers,
+                            public_repos: res.data.public_repos,
+                            private_repos: res.data.total_private_repos
+                        };
+                    });
     }
 
 }
@@ -64,8 +76,8 @@ class GitHubReposSubCommand extends AsyncCommand {
         return  this.octokit
                     .repos
                     .list({ sort: 'updated' })
-                    .then(repos => {
-                        let data = repos.data.map((repo: any) => ({
+                    .then(res => {
+                        let data = res.data.map((repo: any) => ({
                             name: repo.full_name,
                             language: repo.language || 'undefined',
                             stars: repo.stargazers_count,
