@@ -6,8 +6,8 @@ import { Terminal } from 'xterm';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import { webLinksInit } from 'xterm/lib/addons/webLinks/webLinks';
 
-import { AsyncCommand, Command, CommandOutput, isCommandAsync } from './command';
-import { HelpTopic } from './helpTopic';
+import { AsyncCommand, TCommand, TCommandOutput } from '../command/types';
+import { HelpTopic } from '../helpTopic';
 
 const EOL = '\r\n';
 
@@ -18,7 +18,7 @@ export interface CliOptions {
 
 export class Cli extends EventEmitter {
 
-    private commands: { [key: string]: Command; } = {};
+    private commands: { [key: string]: TCommand; } = {};
     private helpTopics: { [key: string]: HelpTopic } = {};
 
     private buffer: string = '';
@@ -121,7 +121,7 @@ export class Cli extends EventEmitter {
 
             let args = minimist.default(buffer.split(' '));
             let argsQueue = args._.slice(0);
-            let command: Command | undefined = undefined;
+            let command: TCommand | undefined = undefined;
             let commands = this.commands;
 
             while (argsQueue.length) {
@@ -140,6 +140,11 @@ export class Cli extends EventEmitter {
             if (command !== undefined) {
                 this.commandRunning = true;
                 this.processCommand(command, { ...args, _: argsQueue })
+                    .catch((err) => {
+                        this.commandRunning = false;
+                        this.write(`ERR! ${this.processCommandOutput(err)}`);
+                        this.prompt();
+                    })
                     .then(output => {
                         this.commandRunning = false;
                         this.write(`${this.processCommandOutput(output)}`);
@@ -149,22 +154,22 @@ export class Cli extends EventEmitter {
             }
             else {
                 this.write(`${args._[0]}: command not found${EOL}`);
-                this.prompt();
             }
 
             this.terminalHistory.push(buffer);
             this.terminalHistoryIndex = this.terminalHistory.length;
         }
-        else {
-            this.prompt();
-        }
         
         this.cursorOffset = 0;
         this.buffer = '';
+
+        if (!this.commandRunning) {
+            this.prompt();
+        }
     }
 
-    private processCommand(command: Command, args: minimist.ParsedArgs): Promise<CommandOutput> {
-        if (isCommandAsync(command)) {
+    private processCommand(command: TCommand, args: minimist.ParsedArgs): Promise<TCommandOutput> {
+        if (command instanceof AsyncCommand) {
             return (<AsyncCommand>command).run(args);
         }
         else {
@@ -172,7 +177,7 @@ export class Cli extends EventEmitter {
         }
     }
 
-    private processCommandOutput(output: CommandOutput): string {
+    private processCommandOutput(output: TCommandOutput): string {
         if (typeof output === 'object') {
             if (Array.isArray(output)) {
                 // print as table
@@ -184,7 +189,8 @@ export class Cli extends EventEmitter {
             }
         }
         else {
-            return output ? output.toString() : '';
+            let o = <any>output;
+            return o || '';
         }
     }
 
@@ -271,7 +277,7 @@ export class Cli extends EventEmitter {
         }
     }
 
-    register(command: Command) {
+    register(command: TCommand) {
         this.commands[command.name] = command;
 
         if (command.helpTopic) {
