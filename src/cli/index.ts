@@ -127,8 +127,10 @@ export class Cli extends EventEmitter {
             while (argsQueue.length) {
                 let arg = argsQueue.shift();
                 
-                if (!arg) break;
-                if (!commands[arg]) break; 
+                if (!arg || !commands[arg]) {
+                    command = undefined;
+                    break;
+                } 
 
                 command = commands[arg];
                 // @ts-ignore
@@ -154,7 +156,7 @@ export class Cli extends EventEmitter {
                     });
             }
             else {
-                this.write(`${args._[0]}: command not found${EOL}`);
+                this.write(`${args._.join(' ')}: command not found${EOL}`);
             }
 
             this.terminalHistory.push(buffer);
