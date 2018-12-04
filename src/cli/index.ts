@@ -141,8 +141,9 @@ export class Cli extends EventEmitter {
                 this.commandRunning = true;
                 this.processCommand(command, { ...args, _: argsQueue })
                     .catch((err) => {
+                        console.log(err);
                         this.commandRunning = false;
-                        this.write(`ERR! ${this.processCommandOutput(err)}`);
+                        this.write(`ERR! ${this.processCommandOutput(err)}${EOL}`);
                         this.prompt();
                     })
                     .then(output => {

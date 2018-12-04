@@ -1,6 +1,5 @@
 import { AnyStringCommand, AwardsCommand, EducationCommand, LanguagesCommand, PublicationsCommand, SkillsCommand, VolunteerCommand, WorkCommand } from '../command';
 import { TCommand } from '../command/types';
-import { Award, Education, Language, Publication, Skill, Volunteer, Work } from '../property';
 import { IProvider } from './types';
 
 export class Json implements IProvider {
@@ -9,42 +8,6 @@ export class Json implements IProvider {
 
     constructor(object: object) {
         this.data = object;
-    }
-
-    getName(): string {
-        return this.data.name;
-    }
-
-    getBio(): string {
-        return this.data.bio;
-    }
-
-    getEducation(): Array<Education> {
-        return this.data.education || [];
-    }
-
-    getWork(): Array<Work> {
-        return this.data.work || [];
-    }
-
-    getVolunteer(): Array<Volunteer> {
-        return this.data.volunteer || [];
-    }
-
-    getAwards(): Array<Award> {
-        return this.data.award || [];
-    }
-
-    getPublications(): Array<Publication> {
-        return this.data.publication || [];
-    }
-
-    getSkills(): Array<Skill> {
-        return this.data.skill || [];
-    }
-
-    getLanguages(): Array<Language> {
-        return this.data.language || [];
     }
 
     getCommands(): Array<TCommand> {
