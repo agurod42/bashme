@@ -186,7 +186,7 @@ export class Cli extends EventEmitter {
             }
             else {
                 // print as json
-                return JSON.stringify(output, null, 2);
+                return JSON.stringify(output, null, 2).slice(1, -1);
             }
         }
         else {
