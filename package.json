@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rm -fr dist && tsc && cp node_modules/xterm/dist/xterm.css dist && node_modules/.bin/webpack",
+    "watch": "rm -fr dist && tsc && cp node_modules/xterm/dist/xterm.css dist && node_modules/.bin/webpack --watch",
     "prepublish": "npm run build",
     "test": "./node_modules/.bin/mocha -r ts-node/register test/**/*.ts"
   },
