@@ -1,3 +1,3 @@
 
-export * from './bashme'
+export * from './bashme';
 export * from './provider';

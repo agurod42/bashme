@@ -9,7 +9,7 @@ export interface BashmeOptions {
     welcomeMessage?: string;
 }
 
-export default class Bashme extends EventEmitter {
+export class Bashme extends EventEmitter {
 
     private options: BashmeOptions = {
         debugMode: false,
