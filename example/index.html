@@ -90,6 +90,9 @@
                 ]
             }
         ));
+
+        bashme.use(new Bashme.GitHub('agurodriguez'));
+
         bashme.show(document.querySelector('#bashme'));
         bashme.on('command', (cmd, args) => console.log(cmd, args));
     </script>

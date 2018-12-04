@@ -7,29 +7,30 @@ import { AsyncCommand } from './types';
 export class GitHubCommand extends AsyncCommand {
 
     private octokit: Octokit;
+    private username: string;
 
     public name: string = 'github';
     public description: string = 'shows GitHub profile information';
     public helpTopic: HelpTopic;
     public subCommands: { [key: string]: AsyncCommand } = {};
 
-    constructor(authToken: string) {
+    constructor(username: string) {
         super();
 
         this.octokit = new Octokit();
-        this.octokit.authenticate({ type: 'token', token: authToken });
+        this.username = username;
         
         this.helpTopic = new HelpTopic(this, {
              synopsis: 'github'
         });
 
-        this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit);
+        this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit, this.username);
     }
 
     run(args: ParsedArgs): Promise<any> {
         return  this.octokit
                     .users
-                    .getAuthenticated({})
+                    .getByUsername({ username: this.username })
                     .then((res: any) => {
                         return {
                             name: res.data.name,
@@ -47,16 +48,18 @@ export class GitHubCommand extends AsyncCommand {
 class GitHubReposSubCommand extends AsyncCommand {
 
     private octokit: Octokit;
+    private username: string;
 
     public name: string = 'github';
     public description: string = 'shows GitHub owned repositories';
     public helpTopic: HelpTopic;
     public subCommands: { [key: string]: AsyncCommand } = {};
 
-    constructor(octokit: Octokit) {
+    constructor(octokit: Octokit, username: string) {
         super();
 
         this.octokit = octokit;
+        this.username = username;
 
         this.helpTopic = new HelpTopic(this, {
             synopsis: 'github repos [-l]',
@@ -75,7 +78,7 @@ class GitHubReposSubCommand extends AsyncCommand {
     run(args: ParsedArgs): Promise<any> {
         return  this.octokit
                     .repos
-                    .list({ sort: 'updated' })
+                    .listForUser({ username: this.username, sort: 'updated' })
                     .then(res => {
                         let data = res.data.map((repo: any) => ({
                             name: repo.full_name,
