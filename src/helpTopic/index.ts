@@ -25,6 +25,12 @@ export class HelpTopic {
                     output += `\t${key}\t${this.helpTopicArgs.options[key]}\r\n`;
                 }
             }
+            if (this.command.subCommands) {
+                output += '\tThe following subcommands are available:\r\n\r\n';
+                for (var key in this.command.subCommands) {
+                    output += `\t${key}\t${this.command.subCommands[key].description}\r\n`;
+                }
+            }
             output += '\r\n';
         }
 
