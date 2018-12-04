@@ -21,25 +21,30 @@ export class GitHubCommand extends AsyncCommand {
         this.username = username;
         
         this.helpTopic = new HelpTopic(this, {
-             synopsis: 'github'
+            synopsis: 'github'
         });
 
         this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit, this.username);
     }
 
-    run(args: ParsedArgs): Promise<any> {
+    run(): Promise<any> {
         return  this.octokit
                     .users
                     .getByUsername({ username: this.username })
                     .then((res: any) => {
-                        return {
+                        let data: any = {
                             name: res.data.name,
                             url: res.data.html_url,
-                            email: res.data.email,
                             followers: res.data.followers,
                             public_repos: res.data.public_repos,
                             private_repos: res.data.total_private_repos
                         };
+
+                        if (res.data.email) {
+                            data.email = res.data.email;
+                        }
+
+                        return data;
                     });
     }
 
