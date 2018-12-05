@@ -24,28 +24,78 @@ export class GitHubCommand extends AsyncCommand {
             synopsis: 'github'
         });
 
+        this.subCommands['orgs'] = new GitHubOrgsSubCommand(this.octokit, this.username)
         this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit, this.username);
     }
 
     run(): Promise<any> {
+        let ps = [
+            // personal data
+            this.octokit
+                .users
+                .getByUsername({ username: this.username })
+                .then((res: any) => {
+                    let data: any = {
+                        name: res.data.name,
+                        url: res.data.html_url,
+                        followers: res.data.followers,
+                        public_repos: res.data.public_repos,
+                        private_repos: res.data.total_private_repos
+                    };
+
+                    if (res.data.email) {
+                        data.email = res.data.email;
+                    }
+
+                    return data;
+                }),
+            // organizations
+            this.octokit
+                .orgs
+                .listForUser({ username: this.username })
+                .then((res: any) => {
+                    return {
+                        organizations: res.data.map((org: any) => org.login).join(', ')
+                    };
+                })
+        ];
+
+        return Promise.all(ps).then((os) => os.reduce((op, on) => Object.assign(op, on), {}));
+    }
+
+}
+
+class GitHubOrgsSubCommand extends AsyncCommand {
+
+    private octokit: Octokit;
+    private username: string;
+
+    public name: string = 'github';
+    public description: string = 'shows GitHub organizations information';
+    public helpTopic: HelpTopic;
+    public subCommands: { [key: string]: AsyncCommand } = {};
+
+    constructor(octokit: Octokit, username: string) {
+        super();
+
+        this.octokit = octokit;
+        this.username = username;
+
+        this.helpTopic = new HelpTopic(this, {
+            synopsis: 'github orgs',
+        });
+    }
+
+    run(): Promise<any> {
         return  this.octokit
-                    .users
-                    .getByUsername({ username: this.username })
+                    .orgs
+                    .listForUser({ username: this.username })
                     .then((res: any) => {
-                        let data: any = {
-                            name: res.data.name,
-                            url: res.data.html_url,
-                            followers: res.data.followers,
-                            public_repos: res.data.public_repos,
-                            private_repos: res.data.total_private_repos
-                        };
-
-                        if (res.data.email) {
-                            data.email = res.data.email;
-                        }
-
-                        return data;
-                    });
+                        return res.data.map((org: any) => ({
+                            name: org.login,
+                            url: org.url.replace('api.github.com', 'github.com'),
+                        }));
+                    })
     }
 
 }
