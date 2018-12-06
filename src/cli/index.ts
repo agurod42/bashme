@@ -49,57 +49,52 @@ export class Cli extends EventEmitter {
     }
 
     private input(str: string) {
+        // console.log(str, str.charCodeAt(0));
         switch (str.charCodeAt(0)) {
             case 8: // backspace
+            case 127: // del
                 if (this.cursorOffset === 0) break;
                 this.cursorOffset--;
                 this.buffer = this.buffer.substr(0, this.cursorOffset) + this.buffer.substr(this.cursorOffset + 1);
-                this.terminal.write('\b \b');
-                break;
-            case 127: // del
-                if (this.cursorOffset === 0) break;
-                // TODO: change it so it works outside browser too
-                console.log(navigator.platform.indexOf('Mac'));
-                if (navigator.platform.indexOf('Mac') >= 0) {
-                    this.cursorOffset--;
-                    this.buffer = this.buffer.substr(0, this.cursorOffset) + this.buffer.substr(this.cursorOffset + 1);
-                    this.terminal.write('\b \b');
-                }
+                var textToRewrite = this.buffer.substr(this.cursorOffset);
+                this.terminal.write('\b' + textToRewrite + ' ' + Array(textToRewrite.length + 2).join('\b'));
                 break;
             case 13: // enter
                 this.terminal.write(EOL);
                 this.processInput();
                 break;
             case 27: 
-                if (str.charCodeAt(1) === 91 && str.charCodeAt(2) === 65) { // up
-                    var cmd = this.terminalHistory[this.terminalHistoryIndex - 1];
-                    if (cmd) {
-                        this.terminalHistoryIndex--;
-                        this.terminal.write(Array(this.buffer.length + 1).join('\b \b'));
-                        this.terminal.write(cmd);
-                        this.cursorOffset = cmd.length;
-                        this.buffer = cmd;
+                if (str.charCodeAt(1) === 91) {
+                    if (str.charCodeAt(2) === 65) { // up
+                        var cmd = this.terminalHistory[this.terminalHistoryIndex - 1];
+                        if (cmd) {
+                            this.terminalHistoryIndex--;
+                            this.terminal.write(Array(this.buffer.length + 1).join('\b \b'));
+                            this.terminal.write(cmd);
+                            this.cursorOffset = cmd.length;
+                            this.buffer = cmd;
+                        }
                     }
-                }
-                else if (str.charCodeAt(1) === 91 && str.charCodeAt(2) === 66) { // down
-                    var cmd = this.terminalHistory[this.terminalHistoryIndex + 1];
-                    if (cmd) {
-                        this.terminalHistoryIndex++;
-                        this.terminal.write(Array(this.buffer.length + 1).join('\b \b'));
-                        this.terminal.write(cmd);
-                        this.cursorOffset = cmd.length;
-                        this.buffer = cmd;
+                    else if (str.charCodeAt(2) === 66) { // down
+                        var cmd = this.terminalHistory[this.terminalHistoryIndex + 1];
+                        if (cmd) {
+                            this.terminalHistoryIndex++;
+                            this.terminal.write(Array(this.buffer.length + 1).join('\b \b'));
+                            this.terminal.write(cmd);
+                            this.cursorOffset = cmd.length;
+                            this.buffer = cmd;
+                        }
                     }
-                }
-                else if (str.charCodeAt(1) === 91 && str.charCodeAt(2) === 67) { // right
-                    if (this.cursorOffset === this.terminal.cols) break;
-                    this.cursorOffset++;
-                    this.terminal.write(str);
-                }
-                else if (str.charCodeAt(2) === 68) { // left
-                    if (this.cursorOffset === 0) break;
-                    this.cursorOffset--;
-                    this.terminal.write(str);
+                    else if (str.charCodeAt(2) === 67) { // right
+                        if (this.cursorOffset === this.terminal.cols) break;
+                        this.cursorOffset++;
+                        this.terminal.write(str);
+                    }
+                    else if (str.charCodeAt(2) === 68) { // left
+                        if (this.cursorOffset === 0) break;
+                        this.cursorOffset--;
+                        this.terminal.write(str);
+                    }
                 }
                 break;
             default:
