@@ -86,7 +86,7 @@ export class Cli extends EventEmitter {
                         }
                     }
                     else if (str.charCodeAt(2) === 67) { // right
-                        if (this.cursorOffset === this.terminal.cols) break;
+                        if (this.cursorOffset === this.buffer.length) break;
                         this.cursorOffset++;
                         this.terminal.write(str);
                     }
