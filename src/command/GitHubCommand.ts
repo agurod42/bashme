@@ -24,6 +24,7 @@ export class GitHubCommand extends AsyncCommand {
             synopsis: 'github'
         });
 
+        this.subCommands['contribs'] = new GitHubContribsSubCommand(this.octokit, this.username)
         this.subCommands['orgs'] = new GitHubOrgsSubCommand(this.octokit, this.username)
         this.subCommands['repos'] = new GitHubReposSubCommand(this.octokit, this.username);
     }
@@ -60,7 +61,83 @@ export class GitHubCommand extends AsyncCommand {
                 })
         ];
 
-        return Promise.all(ps).then((os) => os.reduce((op, on) => Object.assign(op, on), {}));
+        return Promise.all(ps).then((rs) => rs.reduce((op, on) => Object.assign(op, on), {}));
+    }
+
+}
+
+class GitHubContribsSubCommand extends AsyncCommand {
+
+    private octokit: Octokit;
+    private username: string;
+
+    public name: string = 'contribs';
+    public description: string = 'shows GitHub contributions';
+    public helpTopic: HelpTopic;
+    public subCommands: { [key: string]: AsyncCommand } = {};
+
+    constructor(octokit: Octokit, username: string) {
+        super();
+
+        this.octokit = octokit;
+        this.username = username;
+
+        this.helpTopic = new HelpTopic(this, {
+            synopsis: 'github contribs',
+        });
+    }
+
+    run(): Promise<any> {
+        /**
+         * Contributions are defined as merged pull requests at the moment
+         * This so answer it's being used as a guide: https://stackoverflow.com/a/23975976/3879872 
+         */
+        return  this.searchClosedPulls()
+                    .then((pulls: any) => {
+                        return pulls
+                                .filter((pull: any) => (
+                                    pull.repository_url.indexOf(`https://api.github.com/repos/${this.username}/`) !== 0
+                                ))
+                                .map((pull: any) => ({
+                                    repo: pull.repository_url.replace('https://api.github.com/repos/', ''),
+                                    url: pull.html_url,
+                                    closed_at: pull.closed_at
+                                }));
+                    });
+    }
+
+    searchClosedPulls(page?: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.octokit
+                .search
+                .issues({ q: `type:pr+is:merged+author:${this.username}`, page: page || 1, per_page: 100, sort: 'updated' })
+                .catch(reject)
+                .then((res: any) => {
+                    if (page === undefined && res.data.total_count > 100) {
+                        // if we just queried the first page and the results are incomplete
+                        // then we create a promise for every remaining page and wait for 
+                        // all of them to finish in order to resolve the outer one
+                        let pages = Math.ceil(res.data.total_count / 100);
+                        let ps: Array<Promise<any>> = [];
+                        for (let i = 1; i < pages; i++) {
+                            ps.push(this.searchClosedPulls(i));
+                        }
+                        Promise
+                            .all(ps)
+                            .catch(reject)
+                            .then((rs: any) => {
+                                let items = rs.reduce(
+                                    (prev: Array<any>, curr: Array<any>) => prev.concat(curr), 
+                                    res.data.items
+                                );
+                                resolve(items);
+                            });
+                    }
+                    else {
+                        resolve(res.data.items);
+                    }
+                });
+        });
     }
 
 }
@@ -70,8 +147,8 @@ class GitHubOrgsSubCommand extends AsyncCommand {
     private octokit: Octokit;
     private username: string;
 
-    public name: string = 'github';
-    public description: string = 'shows GitHub organizations information';
+    public name: string = 'orgs';
+    public description: string = 'shows GitHub organizations';
     public helpTopic: HelpTopic;
     public subCommands: { [key: string]: AsyncCommand } = {};
 
@@ -105,8 +182,8 @@ class GitHubReposSubCommand extends AsyncCommand {
     private octokit: Octokit;
     private username: string;
 
-    public name: string = 'github';
-    public description: string = 'shows GitHub owned repositories';
+    public name: string = 'repos';
+    public description: string = 'shows GitHub repositories';
     public helpTopic: HelpTopic;
     public subCommands: { [key: string]: AsyncCommand } = {};
 
