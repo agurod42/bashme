@@ -210,7 +210,7 @@ class GitHubReposSubCommand extends AsyncCommand {
     run(args: ParsedArgs): Promise<any> {
         return  this.octokit
                     .repos
-                    .listForUser({ username: this.username, sort: 'updated' })
+                    .listForUser({ username: this.username, sort: 'updated', direction: 'asc' })
                     .then(res => {
                         let data = res.data.map((repo: any) => ({
                             name: repo.full_name,
