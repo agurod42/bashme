@@ -214,7 +214,7 @@ class GitHubReposSubCommand extends AsyncCommand {
                     .then(res => {
                         let data = res.data.map((repo: any) => ({
                             name: repo.full_name,
-                            language: repo.language || 'undefined',
+                            language: repo.language || '',
                             stars: repo.stargazers_count,
                             forks: repo.forks_count,
                             last_updated: repo.updated_at
