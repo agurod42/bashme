@@ -110,7 +110,7 @@ class GitHubContribsSubCommand extends AsyncCommand {
         return new Promise((resolve, reject) => {
             this.octokit
                 .search
-                .issues({ q: `type:pr+is:merged+author:${this.username}`, page: page || 1, per_page: 100, sort: 'updated' })
+                .issues({ q: `type:pr+is:merged+author:${this.username}`, page: page || 1, per_page: 100, sort: 'updated', order: 'asc' })
                 .catch(reject)
                 .then((res: any) => {
                     if (page === undefined && res.data.total_count > 100) {
