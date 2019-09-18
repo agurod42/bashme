@@ -195,51 +195,57 @@ export class Cli extends EventEmitter {
     private processCommandOutputAsTable(output: Array<any>): string {
         if (!output.length) return '';
 
-        // try to estimate the maximun row width 
-        let estimatedMaxRowWidth = 0;
-        let strlen = (o: any) => ('' + o).length;
+        const makeTable = (colWidths?: number[]) => {
+            const table = new Table({
+                chars: {
+                    'top': ' ','top-mid': ' ', 'top-left': ' ', 'top-right': ' ',
+                    'bottom': ' ','bottom-mid': ' ', 'bottom-left': ' ', 'bottom-right': ' ',
+                    'mid': '-', 'mid-mid': '|', 'middle': '|',
+                    'left': ' ', 'left-mid': ' ',
+                    'right': ' ', 'right-mid': ' '
+                },
+                colWidths: colWidths,
+                head: Object.keys(output[0]),
+                wordWrap: true,
+            });
 
-        try {
             output.forEach(item => {
-                let estimatedRowWidth = 1;
-                for (let k in item) {
-                    estimatedRowWidth += strlen(item[k]) + 3;
-                }
-                if (estimatedRowWidth > estimatedMaxRowWidth) {
-                    estimatedMaxRowWidth = estimatedRowWidth;
+                // @ts-ignore
+                table.push(Object.values(item));
+            });
+
+            return table;
+        }
+
+        let table = makeTable([]);
+
+        // if table doesn't fit into terminal then re-compute width of those problematic 
+        // columns and re-render table
+        if (table.width > this.terminal.cols) {
+            let accumulatedWidth = 0;
+            let colsToComputeQueue: number[] = [];
+
+            table.options.colWidths.forEach((colWidth, index) => {
+                let n = accumulatedWidth + (colWidth || 0)
+                if (n <= this.terminal.cols) {
+                    accumulatedWidth = n;
+                } else {
+                    colsToComputeQueue.push(index);
                 }
             });
-        }
-        catch (err) {
+
+            const remainingWidth = this.terminal.cols - table.options.colWidths.length - accumulatedWidth - 1;
+            const colWidths = table.options.colWidths.map((colWidth, index) => {
+                if (colsToComputeQueue.indexOf(index) === -1) {
+                    return colWidth as number;
+                } else {
+                    return Math.floor(remainingWidth / colsToComputeQueue.length);
+                }
+            });
+
+            table = makeTable(colWidths);
         }
 
-        let colWidths = [];
-
-        // if it's needed calculate the last column's width so the entire table fits in the terminal 
-        if (estimatedMaxRowWidth > this.terminal.cols) {
-            let cols = Object.keys(output[0]).length;
-            colWidths = Array(cols).fill(Math.floor(this.terminal.cols / cols - 1));
-            colWidths[cols - 1] += this.terminal.cols % cols - 1;
-        }
-
-        let table = new Table({
-            chars: {
-                'top': ' ','top-mid': ' ', 'top-left': ' ', 'top-right': ' ',
-                'bottom': ' ','bottom-mid': ' ', 'bottom-left': ' ', 'bottom-right': ' ',
-                'mid': '-', 'mid-mid': '|', 'middle': '|',
-                'left': ' ', 'left-mid': ' ',
-                'right': ' ', 'right-mid': ' '
-            },
-            colWidths: colWidths,
-            head: Object.keys(output[0]),
-            wordWrap: true,
-        });
-        
-        output.forEach(item => {
-            // @ts-ignore
-            table.push(Object.values(item));
-        });
-        
         return table.toString();
     }
 
