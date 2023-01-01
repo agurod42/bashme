@@ -33,10 +33,10 @@
     "chai": "^4.2.0",
     "dotenv": "^6.2.0",
     "mocha": "^5.2.0",
-    "ts-loader": "^5.4.5",
+    "ts-loader": "^9.4.2",
     "ts-node": "^7.0.1",
     "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   }
 }
